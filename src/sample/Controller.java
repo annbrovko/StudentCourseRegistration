@@ -67,6 +67,7 @@ public class Controller {
 
     }
 
+    // connect the controller to the database
     public void setDbConnection(DataBaseModel model)
     {
         this.model = model;
@@ -79,11 +80,7 @@ public class Controller {
         }
     }
 
-//    public void setView(View view) {
-//        this.view = view;
-//        view.exitBtn.setOnAction(e -> Platform.exit());
-//    }
-
+    // get the student names from the SQL query
     public ObservableList<CboxResource> getStudents() {
         ArrayList<CboxResource> fullNames = model.SQLQueryStudentNames();
         ObservableList<CboxResource> StudentNames = FXCollections.observableList(fullNames);

@@ -16,6 +16,8 @@ public class CourseInfo {
         this.courseAvg = new SimpleFloatProperty(courseAvg);
     }
 
+    // setters and getters for the information about the course
+
     public int getIdCourse()
     {
         return this.idCourse.get();

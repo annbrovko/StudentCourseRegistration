@@ -18,10 +18,13 @@ public class View {
     private TableView table = new TableView();
 
     public View(Controller control) {
+        // receive the controller
         this.control = control;
+        // execute the functions
         CreateAndConfigure();
     }
 
+    // fills up the scene with student and courses information and set buttons on action
     public void CreateAndConfigure() {
         this.fillStudentsCbox();
         this.fillCoursesCbox();
@@ -31,6 +34,7 @@ public class View {
         this.setFindCourseButtonAction();
     }
 
+    // method to fill out the comboboxes with data on students retrieved from the database
     public void fillStudentsCbox()
     {
         ObservableList<CboxResource> StudentNames = this.control.getStudents();
@@ -41,6 +45,7 @@ public class View {
         System.out.println(this.control.studentSearch.getValue().getID());
     }
 
+    // method to fill out the comboboxes with data on courses retrieved from the database
     public void fillCoursesCbox()
     {
         ObservableList<CboxResource> CourseTitle = this.control.getCourses();
@@ -51,6 +56,7 @@ public class View {
         System.out.println(this.control.courseSearch.getValue().getID());
     }
 
+    // setting button for finding a student on action
     public void setFindStudentButtonAction()
     {
         this.control.showStd.setOnAction(new EventHandler<ActionEvent>() {
@@ -64,6 +70,7 @@ public class View {
         });
     }
 
+    // setting button for finding a course on action
     public void setFindCourseButtonAction()
     {
         this.control.showCourse.setOnAction(new EventHandler<ActionEvent>() {
@@ -72,11 +79,11 @@ public class View {
                 ObservableList<CourseInfo> data = control.getCourseInfo(control.courseSearch.getValue().getID());
                 control.tblCourses.setItems(data);
                 System.out.println(control.courseSearch.getValue().getID());
-                // add button to send new information to the database
             }
         });
     }
 
+    // initialize the columns inside og the table for the student courses
     public void initStudentCoursesTableColumns()
     {
         this.control.idStudentCourse.setCellValueFactory(new PropertyValueFactory<>("idStudentCourse"));
@@ -87,6 +94,7 @@ public class View {
         this.control.studentGrade.setEditable(true);
     }
 
+    // initialize the columns inside og the table for the courses
     public void initCoursesTableColumns()
     {
         this.control.idCourse.setCellValueFactory(new PropertyValueFactory<>("idCourse"));

@@ -15,6 +15,7 @@ public class StudentCourseInfo {
         this.studentGrade = studentGrade;
     }
 
+    // setters and getters for the information on student courses
     public int getIdStudentCourse()
     {
         return this.idStudentCourse.get();

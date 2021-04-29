@@ -4,7 +4,6 @@ import sample.models.CboxResource;
 import sample.models.CourseInfo;
 import sample.models.StudentCourseInfo;
 
-import java.lang.reflect.Array;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -22,10 +21,12 @@ public class DataBaseModel {
         this.url = url;
     }
 
+    // method for getting connection to the database
     public void connect() throws SQLException {
         connection = getConnection(url);
     }
 
+    // method for closing the connection to the database
     public void close() throws SQLException {
         if (connection != null)
             connection.close();
@@ -49,7 +50,7 @@ public class DataBaseModel {
         this.stmt = connection.createStatement();
     }
 
-    // retrieve names of students from database
+    // SQL query to retrieve names of students from database
     public ArrayList<CboxResource> SQLQueryStudentNames() {
         ArrayList<CboxResource> StudentNames = new ArrayList<>();
         String sql = "Select\n" +
@@ -63,8 +64,10 @@ public class DataBaseModel {
         try {
             rs = stmt.executeQuery(sql);
             while (rs != null && rs.next()) {
+                // parsing the id to string
                 int id = Integer.parseInt(rs.getString(1));
                 String fullName = rs.getString(2);
+                // assigning to the arraylist a ComboBox object with both id and full name of the student
                 StudentNames.add(new CboxResource(id, fullName));
             }
         } catch (SQLException e) {
@@ -73,7 +76,7 @@ public class DataBaseModel {
         return StudentNames;
     }
 
-    // get all courses from database
+    // SQL query to get all courses from database
     public ArrayList<CboxResource> SQLQueryCourses() {
         ArrayList<CboxResource> Courses = new ArrayList<>();
         String sql = "Select id_course, c.course_name\n" +
@@ -91,7 +94,7 @@ public class DataBaseModel {
         return Courses;
     }
 
-
+    // create SQL query to retrieve data about the courses from the database
     public ArrayList<CourseInfo> SQLQueryCourse(int idCourse) {
         ArrayList<CourseInfo> courses = new ArrayList<>();
         String sql = "Select sc.id_course, c.course_name , CASE WHEN avg(sc.grade) IS NULL THEN 0 ELSE avg(sc.grade) END as average\n" +
@@ -112,10 +115,9 @@ public class DataBaseModel {
         return courses;
     }
 
-    // create method to retrieve data about the student from the database
+    // create SQL query to retrieve data about the student courses from the database
     public ArrayList<StudentCourseInfo> SQLQueryStudentCourses(int idStudent){
         ArrayList<StudentCourseInfo> courses = new ArrayList<>();
-
         String sql = "SELECT\n" +
                 "    sc.id_studentcourse,\n" +
                 "    c.course_name,\n" +
@@ -142,36 +144,7 @@ public class DataBaseModel {
         return courses;
     }
 
-    // create method to retrieve data about the student from the database
-    public ArrayList<String> SQLQueryStudentNameGrade(String student){
-        ArrayList<String> studentNameGrade = new ArrayList<>();
-        String sql = "SELECT\n" +
-                "    case when u.last_name is not null\n" +
-                "             then (u.first_name || ' ' || u.last_name)\n" +
-                "         else u.first_name\n" +
-                "            end as 'Student',\n" +
-                "    avg(sc.grade) as 'Average'\n" +
-                "FROM\n" +
-                "    user as u\n" +
-                "INNER JOIN\n" +
-                "    student_courses as sc on u.id_user = sc.id_user\n" +
-                "WHERE (u.first_name || ' ' || u.last_name) = '"+ student +"'\n" +
-                "GROUP BY\n" +
-                "    u.id_user;";
-        try{
-            rs = stmt.executeQuery(sql);
-            while (rs != null && rs.next()){
-                String studentName = rs.getString(1);
-                String studentAverage = rs.getString(2);
-                studentNameGrade.add(0, studentName);
-                studentNameGrade.add(1, studentAverage);
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return studentNameGrade;
-    }
-
+    // create SQL query to retrieve data about the student's average grade for a course from the database
     public float SQLQueryStudentCoursesAverage(int userId)
     {
         String sql = "SELECT\n" +
@@ -204,15 +177,6 @@ public class DataBaseModel {
             rs = stmt.executeQuery(sql);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }
-
-    }
-
-
-    // print the requested data from the database in console
-    public void PrintFromDB(ArrayList<String> n) {
-        for (int i = 0; i < n.size(); i++) {
-            System.out.println(n.get(i));
         }
     }
 }
